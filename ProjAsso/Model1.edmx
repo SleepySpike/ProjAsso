@@ -1,0 +1,480 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ProjAssoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Adherent">
+          <Key>
+            <PropertyRef Name="IdAdherent" />
+          </Key>
+          <Property Name="IdAdherent" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdAssociation" Type="int" Nullable="false" />
+          <Property Name="Matricule" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nom" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Prenom" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telephone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Cotisation" Type="bit" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Responsable" Type="bit" Nullable="false" />
+          <Property Name="Solde" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Association">
+          <Key>
+            <PropertyRef Name="IdAssociation" />
+          </Key>
+          <Property Name="IdAssociation" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nom" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="MontantCotisation" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Activite" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Telephone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HistoriquePaiement">
+          <Key>
+            <PropertyRef Name="IdHistoriquePaiement" />
+          </Key>
+          <Property Name="IdHistoriquePaiement" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdAdherent" Type="int" Nullable="false" />
+          <Property Name="IdAssociation" Type="int" Nullable="false" />
+          <Property Name="Paiement" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sortie">
+          <Key>
+            <PropertyRef Name="IdSortie" />
+          </Key>
+          <Property Name="IdSortie" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdAssociation" Type="int" Nullable="false" />
+          <Property Name="Nom" Type="varchar(max)" Nullable="false" />
+          <Property Name="Prix" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="CapaciteMinimum" Type="int" Nullable="false" />
+          <Property Name="CapaciteMaximum" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SortieAdherent">
+          <Key>
+            <PropertyRef Name="IdSortie" />
+            <PropertyRef Name="IdAdherent" />
+            <PropertyRef Name="IdAssociation" />
+          </Key>
+          <Property Name="IdSortie" Type="int" Nullable="false" />
+          <Property Name="IdAdherent" Type="int" Nullable="false" />
+          <Property Name="IdAssociation" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Adherent_Association">
+          <End Role="Association" Type="Self.Association" Multiplicity="1" />
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Association">
+              <PropertyRef Name="IdAssociation" />
+            </Principal>
+            <Dependent Role="Adherent">
+              <PropertyRef Name="IdAssociation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoriquePaiement_Adherent">
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="1" />
+          <End Role="HistoriquePaiement" Type="Self.HistoriquePaiement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adherent">
+              <PropertyRef Name="IdAdherent" />
+            </Principal>
+            <Dependent Role="HistoriquePaiement">
+              <PropertyRef Name="IdAdherent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoriquePaiement_Association">
+          <End Role="Association" Type="Self.Association" Multiplicity="1" />
+          <End Role="HistoriquePaiement" Type="Self.HistoriquePaiement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Association">
+              <PropertyRef Name="IdAssociation" />
+            </Principal>
+            <Dependent Role="HistoriquePaiement">
+              <PropertyRef Name="IdAssociation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sortie_Association">
+          <End Role="Association" Type="Self.Association" Multiplicity="1" />
+          <End Role="Sortie" Type="Self.Sortie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Association">
+              <PropertyRef Name="IdAssociation" />
+            </Principal>
+            <Dependent Role="Sortie">
+              <PropertyRef Name="IdAssociation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SortieAdherent_Adherent">
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="1" />
+          <End Role="SortieAdherent" Type="Self.SortieAdherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adherent">
+              <PropertyRef Name="IdAdherent" />
+            </Principal>
+            <Dependent Role="SortieAdherent">
+              <PropertyRef Name="IdAdherent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SortieAdherent_Association">
+          <End Role="Association" Type="Self.Association" Multiplicity="1" />
+          <End Role="SortieAdherent" Type="Self.SortieAdherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Association">
+              <PropertyRef Name="IdAssociation" />
+            </Principal>
+            <Dependent Role="SortieAdherent">
+              <PropertyRef Name="IdAssociation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SortieAdherent_Sortie">
+          <End Role="Sortie" Type="Self.Sortie" Multiplicity="1" />
+          <End Role="SortieAdherent" Type="Self.SortieAdherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sortie">
+              <PropertyRef Name="IdSortie" />
+            </Principal>
+            <Dependent Role="SortieAdherent">
+              <PropertyRef Name="IdSortie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProjAssoModelStoreContainer">
+          <EntitySet Name="Adherent" EntityType="Self.Adherent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Association" EntityType="Self.Association" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HistoriquePaiement" EntityType="Self.HistoriquePaiement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sortie" EntityType="Self.Sortie" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SortieAdherent" EntityType="Self.SortieAdherent" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Adherent_Association" Association="Self.FK_Adherent_Association">
+            <End Role="Association" EntitySet="Association" />
+            <End Role="Adherent" EntitySet="Adherent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoriquePaiement_Adherent" Association="Self.FK_HistoriquePaiement_Adherent">
+            <End Role="Adherent" EntitySet="Adherent" />
+            <End Role="HistoriquePaiement" EntitySet="HistoriquePaiement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoriquePaiement_Association" Association="Self.FK_HistoriquePaiement_Association">
+            <End Role="Association" EntitySet="Association" />
+            <End Role="HistoriquePaiement" EntitySet="HistoriquePaiement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sortie_Association" Association="Self.FK_Sortie_Association">
+            <End Role="Association" EntitySet="Association" />
+            <End Role="Sortie" EntitySet="Sortie" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SortieAdherent_Adherent" Association="Self.FK_SortieAdherent_Adherent">
+            <End Role="Adherent" EntitySet="Adherent" />
+            <End Role="SortieAdherent" EntitySet="SortieAdherent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SortieAdherent_Association" Association="Self.FK_SortieAdherent_Association">
+            <End Role="Association" EntitySet="Association" />
+            <End Role="SortieAdherent" EntitySet="SortieAdherent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SortieAdherent_Sortie" Association="Self.FK_SortieAdherent_Sortie">
+            <End Role="Sortie" EntitySet="Sortie" />
+            <End Role="SortieAdherent" EntitySet="SortieAdherent" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProjAssoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Adherent">
+          <Key>
+            <PropertyRef Name="IdAdherent" />
+          </Key>
+          <Property Name="IdAdherent" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdAssociation" Type="Int32" Nullable="false" />
+          <Property Name="Matricule" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nom" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prenom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Cotisation" Type="Boolean" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Responsable" Type="Boolean" Nullable="false" />
+          <Property Name="Solde" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Association" Relationship="Self.FK_Adherent_Association" FromRole="Adherent" ToRole="Association" />
+          <NavigationProperty Name="HistoriquePaiements" Relationship="Self.FK_HistoriquePaiement_Adherent" FromRole="Adherent" ToRole="HistoriquePaiement" />
+          <NavigationProperty Name="SortieAdherents" Relationship="Self.FK_SortieAdherent_Adherent" FromRole="Adherent" ToRole="SortieAdherent" />
+        </EntityType>
+        <EntityType Name="Association">
+          <Key>
+            <PropertyRef Name="IdAssociation" />
+          </Key>
+          <Property Name="IdAssociation" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nom" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MontantCotisation" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Activite" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Adherents" Relationship="Self.FK_Adherent_Association" FromRole="Association" ToRole="Adherent" />
+          <NavigationProperty Name="HistoriquePaiements" Relationship="Self.FK_HistoriquePaiement_Association" FromRole="Association" ToRole="HistoriquePaiement" />
+          <NavigationProperty Name="Sorties" Relationship="Self.FK_Sortie_Association" FromRole="Association" ToRole="Sortie" />
+          <NavigationProperty Name="SortieAdherents" Relationship="Self.FK_SortieAdherent_Association" FromRole="Association" ToRole="SortieAdherent" />
+        </EntityType>
+        <EntityType Name="HistoriquePaiement">
+          <Key>
+            <PropertyRef Name="IdHistoriquePaiement" />
+          </Key>
+          <Property Name="IdHistoriquePaiement" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdAdherent" Type="Int32" Nullable="false" />
+          <Property Name="IdAssociation" Type="Int32" Nullable="false" />
+          <Property Name="Paiement" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Adherent" Relationship="Self.FK_HistoriquePaiement_Adherent" FromRole="HistoriquePaiement" ToRole="Adherent" />
+          <NavigationProperty Name="Association" Relationship="Self.FK_HistoriquePaiement_Association" FromRole="HistoriquePaiement" ToRole="Association" />
+        </EntityType>
+        <EntityType Name="Sortie">
+          <Key>
+            <PropertyRef Name="IdSortie" />
+          </Key>
+          <Property Name="IdSortie" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdAssociation" Type="Int32" Nullable="false" />
+          <Property Name="Nom" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prix" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CapaciteMinimum" Type="Int32" Nullable="false" />
+          <Property Name="CapaciteMaximum" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Association" Relationship="Self.FK_Sortie_Association" FromRole="Sortie" ToRole="Association" />
+          <NavigationProperty Name="SortieAdherents" Relationship="Self.FK_SortieAdherent_Sortie" FromRole="Sortie" ToRole="SortieAdherent" />
+        </EntityType>
+        <EntityType Name="SortieAdherent">
+          <Key>
+            <PropertyRef Name="IdSortie" />
+            <PropertyRef Name="IdAdherent" />
+            <PropertyRef Name="IdAssociation" />
+          </Key>
+          <Property Name="IdSortie" Type="Int32" Nullable="false" />
+          <Property Name="IdAdherent" Type="Int32" Nullable="false" />
+          <Property Name="IdAssociation" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Adherent" Relationship="Self.FK_SortieAdherent_Adherent" FromRole="SortieAdherent" ToRole="Adherent" />
+          <NavigationProperty Name="Association" Relationship="Self.FK_SortieAdherent_Association" FromRole="SortieAdherent" ToRole="Association" />
+          <NavigationProperty Name="Sortie" Relationship="Self.FK_SortieAdherent_Sortie" FromRole="SortieAdherent" ToRole="Sortie" />
+        </EntityType>
+        <Association Name="FK_Adherent_Association">
+          <End Role="Association" Type="Self.Association" Multiplicity="1" />
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Association">
+              <PropertyRef Name="IdAssociation" />
+            </Principal>
+            <Dependent Role="Adherent">
+              <PropertyRef Name="IdAssociation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoriquePaiement_Adherent">
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="1" />
+          <End Role="HistoriquePaiement" Type="Self.HistoriquePaiement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adherent">
+              <PropertyRef Name="IdAdherent" />
+            </Principal>
+            <Dependent Role="HistoriquePaiement">
+              <PropertyRef Name="IdAdherent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SortieAdherent_Adherent">
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="1" />
+          <End Role="SortieAdherent" Type="Self.SortieAdherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adherent">
+              <PropertyRef Name="IdAdherent" />
+            </Principal>
+            <Dependent Role="SortieAdherent">
+              <PropertyRef Name="IdAdherent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HistoriquePaiement_Association">
+          <End Role="Association" Type="Self.Association" Multiplicity="1" />
+          <End Role="HistoriquePaiement" Type="Self.HistoriquePaiement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Association">
+              <PropertyRef Name="IdAssociation" />
+            </Principal>
+            <Dependent Role="HistoriquePaiement">
+              <PropertyRef Name="IdAssociation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sortie_Association">
+          <End Role="Association" Type="Self.Association" Multiplicity="1" />
+          <End Role="Sortie" Type="Self.Sortie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Association">
+              <PropertyRef Name="IdAssociation" />
+            </Principal>
+            <Dependent Role="Sortie">
+              <PropertyRef Name="IdAssociation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SortieAdherent_Association">
+          <End Role="Association" Type="Self.Association" Multiplicity="1" />
+          <End Role="SortieAdherent" Type="Self.SortieAdherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Association">
+              <PropertyRef Name="IdAssociation" />
+            </Principal>
+            <Dependent Role="SortieAdherent">
+              <PropertyRef Name="IdAssociation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SortieAdherent_Sortie">
+          <End Role="Sortie" Type="Self.Sortie" Multiplicity="1" />
+          <End Role="SortieAdherent" Type="Self.SortieAdherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sortie">
+              <PropertyRef Name="IdSortie" />
+            </Principal>
+            <Dependent Role="SortieAdherent">
+              <PropertyRef Name="IdSortie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProjAssoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Adherents" EntityType="Self.Adherent" />
+          <EntitySet Name="Associations" EntityType="Self.Association" />
+          <EntitySet Name="HistoriquePaiements" EntityType="Self.HistoriquePaiement" />
+          <EntitySet Name="Sorties" EntityType="Self.Sortie" />
+          <EntitySet Name="SortieAdherents" EntityType="Self.SortieAdherent" />
+          <AssociationSet Name="FK_Adherent_Association" Association="Self.FK_Adherent_Association">
+            <End Role="Association" EntitySet="Associations" />
+            <End Role="Adherent" EntitySet="Adherents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoriquePaiement_Adherent" Association="Self.FK_HistoriquePaiement_Adherent">
+            <End Role="Adherent" EntitySet="Adherents" />
+            <End Role="HistoriquePaiement" EntitySet="HistoriquePaiements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SortieAdherent_Adherent" Association="Self.FK_SortieAdherent_Adherent">
+            <End Role="Adherent" EntitySet="Adherents" />
+            <End Role="SortieAdherent" EntitySet="SortieAdherents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HistoriquePaiement_Association" Association="Self.FK_HistoriquePaiement_Association">
+            <End Role="Association" EntitySet="Associations" />
+            <End Role="HistoriquePaiement" EntitySet="HistoriquePaiements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sortie_Association" Association="Self.FK_Sortie_Association">
+            <End Role="Association" EntitySet="Associations" />
+            <End Role="Sortie" EntitySet="Sorties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SortieAdherent_Association" Association="Self.FK_SortieAdherent_Association">
+            <End Role="Association" EntitySet="Associations" />
+            <End Role="SortieAdherent" EntitySet="SortieAdherents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SortieAdherent_Sortie" Association="Self.FK_SortieAdherent_Sortie">
+            <End Role="Sortie" EntitySet="Sorties" />
+            <End Role="SortieAdherent" EntitySet="SortieAdherents" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ProjAssoModelStoreContainer" CdmEntityContainer="ProjAssoEntities">
+          <EntitySetMapping Name="Adherents">
+            <EntityTypeMapping TypeName="ProjAssoModel.Adherent">
+              <MappingFragment StoreEntitySet="Adherent">
+                <ScalarProperty Name="IdAdherent" ColumnName="IdAdherent" />
+                <ScalarProperty Name="IdAssociation" ColumnName="IdAssociation" />
+                <ScalarProperty Name="Matricule" ColumnName="Matricule" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Cotisation" ColumnName="Cotisation" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Responsable" ColumnName="Responsable" />
+                <ScalarProperty Name="Solde" ColumnName="Solde" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Associations">
+            <EntityTypeMapping TypeName="ProjAssoModel.Association">
+              <MappingFragment StoreEntitySet="Association">
+                <ScalarProperty Name="IdAssociation" ColumnName="IdAssociation" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="MontantCotisation" ColumnName="MontantCotisation" />
+                <ScalarProperty Name="Activite" ColumnName="Activite" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HistoriquePaiements">
+            <EntityTypeMapping TypeName="ProjAssoModel.HistoriquePaiement">
+              <MappingFragment StoreEntitySet="HistoriquePaiement">
+                <ScalarProperty Name="IdHistoriquePaiement" ColumnName="IdHistoriquePaiement" />
+                <ScalarProperty Name="IdAdherent" ColumnName="IdAdherent" />
+                <ScalarProperty Name="IdAssociation" ColumnName="IdAssociation" />
+                <ScalarProperty Name="Paiement" ColumnName="Paiement" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sorties">
+            <EntityTypeMapping TypeName="ProjAssoModel.Sortie">
+              <MappingFragment StoreEntitySet="Sortie">
+                <ScalarProperty Name="IdSortie" ColumnName="IdSortie" />
+                <ScalarProperty Name="IdAssociation" ColumnName="IdAssociation" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Prix" ColumnName="Prix" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="CapaciteMinimum" ColumnName="CapaciteMinimum" />
+                <ScalarProperty Name="CapaciteMaximum" ColumnName="CapaciteMaximum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SortieAdherents">
+            <EntityTypeMapping TypeName="ProjAssoModel.SortieAdherent">
+              <MappingFragment StoreEntitySet="SortieAdherent">
+                <ScalarProperty Name="IdSortie" ColumnName="IdSortie" />
+                <ScalarProperty Name="IdAdherent" ColumnName="IdAdherent" />
+                <ScalarProperty Name="IdAssociation" ColumnName="IdAssociation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ProjAsso.Sortie>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prix)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CapaciteMinimum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CapaciteMaximum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Association.Nom)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Prix)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CapaciteMinimum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CapaciteMaximum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Association.Nom)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IdSortie }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IdSortie }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IdSortie })
+        </td>
+    </tr>
+}
+
+</table>

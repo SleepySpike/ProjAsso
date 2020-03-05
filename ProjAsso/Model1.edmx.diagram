@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="951e710b8e95491cb65371a2b467ee82" Name="Diagram1">
+        <EntityTypeShape EntityType="ProjAssoModel.Adherent" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjAssoModel.Association" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjAssoModel.HistoriquePaiement" Width="1.5" PointX="5.25" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjAssoModel.Sortie" Width="1.5" PointX="3" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjAssoModel.SortieAdherent" Width="1.5" PointX="5.25" PointY="6.625" IsExpanded="true" />
+        <AssociationConnector Association="ProjAssoModel.FK_Adherent_Association" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjAssoModel.FK_HistoriquePaiement_Adherent" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjAssoModel.FK_SortieAdherent_Adherent" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjAssoModel.FK_HistoriquePaiement_Association" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjAssoModel.FK_Sortie_Association" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjAssoModel.FK_SortieAdherent_Association" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjAssoModel.FK_SortieAdherent_Sortie" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
