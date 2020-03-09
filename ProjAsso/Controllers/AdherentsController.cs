@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using ProjAsso;
 
 namespace ProjAsso.Controllers
@@ -27,11 +28,11 @@ namespace ProjAsso.Controllers
         {
             if (ModelState.IsValid)
             {
-                var adherents = db.Adherents.FirstOrDefault(a => a.Login == adherent.Login && a.Password == adherent.Password);
+                var adherentDb = db.Adherents.FirstOrDefault(a => a.Login == adherent.Login && a.Password == adherent.Password);
 
-                if (adherents != null)
+                if (adherentDb != null)
                 {
-                    Session["Adherent"] = adherent;
+                    Session["Adherent"] = adherentDb;
                     return RedirectToAction("Index", "Sorties");
                 }
                 else
@@ -41,6 +42,26 @@ namespace ProjAsso.Controllers
             }
             return View();
         }
+
+        public ActionResult Deconnection()
+        {
+            if (Session["Adherent"] == null)
+            {
+                return RedirectToAction("Connexion", "Adherents");
+            }
+
+            else
+            {
+                FormsAuthentication.SignOut();
+                Session.Abandon();
+                Session.RemoveAll();
+                Session.Clear();
+
+                return RedirectToAction("Connexion", "Adherents");
+            }
+        }
+
+
 
         // GET: Adherents
         public ActionResult Index()

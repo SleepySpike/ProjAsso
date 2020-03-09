@@ -17,8 +17,78 @@ namespace ProjAsso.Controllers
         // GET: Sorties
         public ActionResult Index()
         {
-            var sorties = db.Sorties.Include(s => s.Association);
-            return View(sorties.ToList());
+            Adherent adherent = (Adherent)Session["Adherent"];
+            ViewBag.IsInscript = false;
+
+
+            if (adherent != null)
+            {
+                var sorties = db.Sorties.Include(s => s.Association).Where(a => a.IdAssociation == adherent.IdAssociation);
+                ViewBag.Adherent = adherent;
+                return View(sorties.ToList());
+                
+            }
+
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+        }
+
+        public ActionResult MesSorties()
+        {
+            Adherent adherent = (Adherent)Session["Adherent"];
+
+            if (adherent != null)
+            {
+                var mesSorties = db.SortieAdherents.Where(sa => sa.IdAdherent == adherent.IdAdherent).ToList();
+                return View(mesSorties);
+            }
+
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
+
+        }
+
+        public ActionResult Inscription(int? id)
+        {
+            Adherent adherent = (Adherent)Session["Adherent"];
+
+            if (adherent == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Sortie maSortie = db.Sorties.Find(id);
+
+            if (maSortie == null)
+            {
+                return HttpNotFound();
+            }
+
+            List<Sortie> mesSorties = new List<Sortie>();
+
+            if(Session["MesSorties"] == null)
+            {
+                Session["MesSorties"] = maSortie;
+            }
+            else
+            {
+                mesSorties = (List<Sortie>)Session["MesSorties"];
+                mesSorties.Add(maSortie);
+                Session["MesSorties"] = mesSorties;
+            }
+
+            SortieAdherent sortieAdherent = new SortieAdherent();
+            sortieAdherent.IdAdherent = adherent.IdAdherent;
+            sortieAdherent.IdSortie = (int)id;
+            sortieAdherent.IdAssociation = adherent.IdAssociation;
+
+            db.SortieAdherents.Add(sortieAdherent);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: Sorties/Details/5

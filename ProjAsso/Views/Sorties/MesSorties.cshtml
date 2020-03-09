@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ProjAsso.SortieAdherent>
+
+@{
+    ViewBag.Title = "MesSorties";
+}
+
+<h2>MesSorties</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Sortie.Nom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sortie.Prix)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sortie.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sortie.Date)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sortie.Nom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sortie.Prix)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sortie.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sortie.Date)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IdSortie }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IdSortie }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IdSortie })
+        </td>
+    </tr>
+}
+
+</table>
