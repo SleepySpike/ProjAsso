@@ -17,6 +17,7 @@ namespace ProjAsso
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Sortie()
         {
+            this.HistoriquePaiements = new HashSet<HistoriquePaiement>();
             this.SortieAdherents = new HashSet<SortieAdherent>();
         }
     
@@ -30,6 +31,8 @@ namespace ProjAsso
         public int CapaciteMaximum { get; set; }
     
         public virtual Association Association { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HistoriquePaiement> HistoriquePaiements { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SortieAdherent> SortieAdherents { get; set; }
     }

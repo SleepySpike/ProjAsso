@@ -30,5 +30,6 @@ namespace ProjAsso
         public virtual DbSet<HistoriquePaiement> HistoriquePaiements { get; set; }
         public virtual DbSet<Sortie> Sorties { get; set; }
         public virtual DbSet<SortieAdherent> SortieAdherents { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }

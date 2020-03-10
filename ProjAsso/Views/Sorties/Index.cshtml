@@ -45,13 +45,14 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
+                @*Vérification de l'inscription du user pour chaque sortie de la liste*@
                 @if (item.SortieAdherents.FirstOrDefault(i => i.IdAdherent == adherent.IdAdherent) != null)
                 {
-                    @Html.ActionLink("Annuler", "CancelInscription", "Sorties")
+                    @Html.ActionLink("Annuler", "CancelInscription", "Sorties", new {idSortie = item.IdSortie, idAdherent = adherent.IdAdherent, idAssociation = adherent.IdAssociation }, null)
                 }
                 else
                 {
-                    @Html.ActionLink("S'inscrire", "Inscription", "Sorties", new {id = item.IdSortie }, null)
+                    @Html.ActionLink("S'inscrire", "Inscription", "Sorties", new {idSortie = item.IdSortie, idAdherent = adherent.IdAdherent }, null)
                 }
             </td>
         </tr>

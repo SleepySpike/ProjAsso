@@ -12,17 +12,12 @@ namespace ProjAsso
     using System;
     using System.Collections.Generic;
     
-    public partial class HistoriquePaiement
+    public partial class sysdiagram
     {
-        public int IdHistoriquePaiement { get; set; }
-        public int IdAdherent { get; set; }
-        public int IdAssociation { get; set; }
-        public decimal Paiement { get; set; }
-        public System.DateTime Date { get; set; }
-        public int IdSortie { get; set; }
-    
-        public virtual Adherent Adherent { get; set; }
-        public virtual Association Association { get; set; }
-        public virtual Sortie Sortie { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }
