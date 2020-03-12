@@ -1,0 +1,58 @@
+﻿@model ProjAsso.HistoriquePaiement
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>HistoriquePaiement</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Paiement)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Paiement)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Adherent.Matricule)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Adherent.Matricule)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Association.Nom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Association.Nom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sortie.Nom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sortie.Nom)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdHistoriquePaiement }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

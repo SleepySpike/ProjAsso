@@ -86,10 +86,19 @@ namespace ProjAsso.Controllers
         }
 
         // GET: Adherents/Create
-        public ActionResult Create()
+        public ActionResult Create(int? idAdherent)
         {
-            ViewBag.IdAssociation = new SelectList(db.Associations, "IdAssociation", "Nom");
-            return View();
+            Adherent adherent = db.Adherents.Find(idAdherent);
+
+            if (idAdherent != null && adherent.Responsable == true)
+            {
+                ViewBag.IdAssociation = new SelectList(db.Associations, "IdAssociation", "Nom");
+                return View();
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
         }
 
         // POST: Adherents/Create

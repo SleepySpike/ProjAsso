@@ -3,6 +3,33 @@
 @{
     ViewBag.Title = "Index";
     Adherent adherent = ViewBag.Adherent;
+
+}
+
+@section scripts{
+
+    @if (TempData["Modal"] != null)
+    {
+        int message = Convert.ToInt32(TempData["Modal"]);
+
+        <script>
+            //Appel de ma méthode openModal créée ci-dessous (@@ avant ma var message car c#, sinon non visible)
+            $(document).ready(function () {
+                $('.btnInscription').click(openModal(@message))
+            });
+
+            //Creation de la méthode openModal -> ouvrir ma modal et envoyer un message en fonction de tempdata
+            function openModal(message) {
+                $('#modalError').modal('show');
+                if (message == 1) {
+                    $('#message').html('Votre solde ne vous permet pas de vous inscrire');
+                } else if (message == 2) {
+                    $('#message').html('Il n\'y a plus de places disponibles pour cette sortie');
+                }
+            }
+        </script>
+    }
+
 }
 
 <h2>Sorties</h2>
@@ -42,20 +69,37 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Date)
+                @String.Format("{0:dd/MM/yyyy}", item.Date)
             </td>
             <td>
                 @*Vérification de l'inscription du user pour chaque sortie de la liste*@
                 @if (item.SortieAdherents.FirstOrDefault(i => i.IdAdherent == adherent.IdAdherent) != null)
                 {
-                    @Html.ActionLink("Annuler", "CancelInscription", "Sorties", new {idSortie = item.IdSortie, idAdherent = adherent.IdAdherent, idAssociation = adherent.IdAssociation }, null)
+                    @*<button type="button" data-idsortie="@item.IdSortie" class="btn btn-danger annuler">Annuler</button>*@
+                    @Html.ActionLink("Annuler", "CancelInscription", "Sorties", new { idSortie = item.IdSortie, idAdherent = adherent.IdAdherent, idAssociation = adherent.IdAssociation }, null)
                 }
                 else
                 {
-                    @Html.ActionLink("S'inscrire", "Inscription", "Sorties", new {idSortie = item.IdSortie, idAdherent = adherent.IdAdherent }, null)
+                    @*<button type="button" data-idsortie="@item.IdSortie" class="btn btn-danger shadow" data-dismiss="modal">S'inscrire</button>*@
+                    @Html.ActionLink("S'inscrire", "Inscription", "Sorties", new { idSortie = item.IdSortie, idAdherent = adherent.IdAdherent }, new { @class = "btnInscription" })
                 }
+
+                @Html.ActionLink("Details", "Details", new { id = item.IdSortie })
             </td>
         </tr>
     }
 
 </table>
+
+<div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="message">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+

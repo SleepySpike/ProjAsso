@@ -20,6 +20,7 @@ namespace ProjAsso
         public decimal Paiement { get; set; }
         public System.DateTime Date { get; set; }
         public int IdSortie { get; set; }
+        public bool Statut { get; set; }
     
         public virtual Adherent Adherent { get; set; }
         public virtual Association Association { get; set; }

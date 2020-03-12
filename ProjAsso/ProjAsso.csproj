@@ -137,6 +137,7 @@
     </Compile>
     <Compile Include="Controllers\AdherentsController.cs" />
     <Compile Include="Controllers\AssociationsController.cs" />
+    <Compile Include="Controllers\HistoriquePaiementsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SortiesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -345,6 +346,11 @@
     <Content Include="Views\Sorties\Edit.cshtml" />
     <Content Include="Views\Sorties\Index.cshtml" />
     <Content Include="Views\Sorties\MesSorties.cshtml" />
+    <Content Include="Views\HistoriquePaiements\Create.cshtml" />
+    <Content Include="Views\HistoriquePaiements\Delete.cshtml" />
+    <Content Include="Views\HistoriquePaiements\Details.cshtml" />
+    <Content Include="Views\HistoriquePaiements\Edit.cshtml" />
+    <Content Include="Views\HistoriquePaiements\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

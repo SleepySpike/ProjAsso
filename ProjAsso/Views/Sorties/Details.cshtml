@@ -2,6 +2,34 @@
 
 @{
     ViewBag.Title = "Details";
+    Adherent adherent = ViewBag.Adherent;
+
+}
+
+@section scripts{
+
+    @if (TempData["Modal"] != null)
+    {
+        int message = Convert.ToInt32(TempData["Modal"]);
+
+        <script>
+            //Appel de ma méthode openModal créée ci-dessous (@@ avant ma var message car c#, sinon non visible)
+            $(document).ready(function () {
+                $('.btnInscription').click(openModal(@message))
+            });
+
+            //Creation de la méthode openModal -> ouvrir ma modal et envoyer un message en fonction de tempdata
+            function openModal(message) {
+                $('#modalError').modal('show');
+                if (message == 1) {
+                    $('#message').html('Votre solde ne vous permet pas de vous inscrire');
+                } else if (message == 2) {
+                    $('#message').html('Il n\'y a plus de places disponibles pour cette sortie');
+                }
+            }
+        </script>
+    }
+
 }
 
 <h2>Details</h2>
@@ -39,36 +67,33 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CapaciteMinimum)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CapaciteMinimum)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CapaciteMaximum)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CapaciteMaximum)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Association.Nom)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Association.Nom)
+            @String.Format("{0:dd/MM/yyyy}", Model.Date)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.IdSortie }) |
-    @Html.ActionLink("Back to List", "Index")
+                @*Vérification de l'inscription du user pour chaque sortie de la liste*@
+                @if (Model.SortieAdherents.FirstOrDefault(i => i.IdAdherent == adherent.IdAdherent) != null)
+                {
+                    @*<button type="button" data-idsortie="@item.IdSortie" class="btn btn-danger annuler">Annuler</button>*@
+                    @Html.ActionLink("Annuler", "CancelInscription", "Sorties", new { idSortie = Model.IdSortie, idAdherent = adherent.IdAdherent, idAssociation = adherent.IdAssociation }, null)
+                }
+                else
+                {
+                    @*<button type="button" data-idsortie="@item.IdSortie" class="btn btn-danger shadow" data-dismiss="modal">S'inscrire</button>*@
+                    @Html.ActionLink("S'inscrire", "Inscription", "Sorties", new { idSortie = Model.IdSortie, idAdherent = adherent.IdAdherent }, new { @class = "btnInscription" })
+                }
 </p>
+
+<div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="message">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ProjAssoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ProjAssoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Adherent">
           <Key>
             <PropertyRef Name="IdAdherent" />
@@ -43,6 +43,7 @@
           <Property Name="Paiement" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Date" Type="date" Nullable="false" />
           <Property Name="IdSortie" Type="int" Nullable="false" />
+          <Property Name="Statut" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Sortie">
           <Key>
@@ -56,6 +57,7 @@
           <Property Name="Date" Type="date" Nullable="false" />
           <Property Name="CapaciteMinimum" Type="int" Nullable="false" />
           <Property Name="CapaciteMaximum" Type="int" Nullable="false" />
+          <Property Name="NbInscrits" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="SortieAdherent">
           <Key>
@@ -66,6 +68,7 @@
           <Property Name="IdSortie" Type="int" Nullable="false" />
           <Property Name="IdAdherent" Type="int" Nullable="false" />
           <Property Name="IdAssociation" Type="int" Nullable="false" />
+          <Property Name="Statut" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -213,8 +216,7 @@
             <End Role="SortieAdherent" EntitySet="SortieAdherent" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ProjAssoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -266,6 +268,7 @@
           <NavigationProperty Name="Adherent" Relationship="Self.FK_HistoriquePaiement_Adherent" FromRole="HistoriquePaiement" ToRole="Adherent" />
           <NavigationProperty Name="Association" Relationship="Self.FK_HistoriquePaiement_Association" FromRole="HistoriquePaiement" ToRole="Association" />
           <NavigationProperty Name="Sortie" Relationship="Self.FK_HistoriquePaiement_Sortie" FromRole="HistoriquePaiement" ToRole="Sortie" />
+          <Property Name="Statut" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Sortie">
           <Key>
@@ -282,6 +285,7 @@
           <NavigationProperty Name="Association" Relationship="Self.FK_Sortie_Association" FromRole="Sortie" ToRole="Association" />
           <NavigationProperty Name="HistoriquePaiements" Relationship="Self.FK_HistoriquePaiement_Sortie" FromRole="Sortie" ToRole="HistoriquePaiement" />
           <NavigationProperty Name="SortieAdherents" Relationship="Self.FK_SortieAdherent_Sortie" FromRole="Sortie" ToRole="SortieAdherent" />
+          <Property Name="NbInscrits" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="SortieAdherent">
           <Key>
@@ -295,6 +299,7 @@
           <NavigationProperty Name="Adherent" Relationship="Self.FK_SortieAdherent_Adherent" FromRole="SortieAdherent" ToRole="Adherent" />
           <NavigationProperty Name="Association" Relationship="Self.FK_SortieAdherent_Association" FromRole="SortieAdherent" ToRole="Association" />
           <NavigationProperty Name="Sortie" Relationship="Self.FK_SortieAdherent_Sortie" FromRole="SortieAdherent" ToRole="Sortie" />
+          <Property Name="Statut" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -481,6 +486,7 @@
           <EntitySetMapping Name="HistoriquePaiements">
             <EntityTypeMapping TypeName="ProjAssoModel.HistoriquePaiement">
               <MappingFragment StoreEntitySet="HistoriquePaiement">
+                <ScalarProperty Name="Statut" ColumnName="Statut" />
                 <ScalarProperty Name="IdHistoriquePaiement" ColumnName="IdHistoriquePaiement" />
                 <ScalarProperty Name="IdAdherent" ColumnName="IdAdherent" />
                 <ScalarProperty Name="IdAssociation" ColumnName="IdAssociation" />
@@ -493,6 +499,7 @@
           <EntitySetMapping Name="Sorties">
             <EntityTypeMapping TypeName="ProjAssoModel.Sortie">
               <MappingFragment StoreEntitySet="Sortie">
+                <ScalarProperty Name="NbInscrits" ColumnName="NbInscrits" />
                 <ScalarProperty Name="IdSortie" ColumnName="IdSortie" />
                 <ScalarProperty Name="IdAssociation" ColumnName="IdAssociation" />
                 <ScalarProperty Name="Nom" ColumnName="Nom" />
@@ -507,6 +514,7 @@
           <EntitySetMapping Name="SortieAdherents">
             <EntityTypeMapping TypeName="ProjAssoModel.SortieAdherent">
               <MappingFragment StoreEntitySet="SortieAdherent">
+                <ScalarProperty Name="Statut" ColumnName="Statut" />
                 <ScalarProperty Name="IdSortie" ColumnName="IdSortie" />
                 <ScalarProperty Name="IdAdherent" ColumnName="IdAdherent" />
                 <ScalarProperty Name="IdAssociation" ColumnName="IdAssociation" />

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ProjAsso.HistoriquePaiement>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Paiement)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Adherent.Matricule)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sortie.Nom)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Paiement)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Adherent.Matricule)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sortie.Nom)
+        </td>
+    </tr>
+}
+
+</table>

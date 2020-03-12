@@ -27,7 +27,7 @@
                 @if (isConnected == true)
                 {
                     <li class="nav-item mx-4">
-                        <a class="nav-link" @Html.ActionLink("Accueil", "Index", "Sorties")></a>
+                        <a class="nav-link" href="@Url.Action("Index", "Sorties")">Accueil</a>
                     </li>
                 }
 
@@ -38,9 +38,9 @@
                             Responsable Access
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="@Url.Action("Index","HistoriquePaiement")">Tresorerie</a>
-                            <a class="dropdown-item" href="@Url.Action("Create","Sorties")">Créer Sortie</a>
-                            <a class="dropdown-item" href="@Url.Action("Create","Adherents")">Inscrire Adhérent</a>
+                            <a class="dropdown-item" href="@Url.Action("Index","HistoriquePaiements", new { idAdherent = adherent.IdAdherent } )">Tresorerie</a>
+                            <a class="dropdown-item" href="@Url.Action("Create","Sorties", new { idAdherent = adherent.IdAdherent } )">Créer Sortie</a>
+                            <a class="dropdown-item" href="@Url.Action("Create","Adherents", new { idAdherent = adherent.IdAdherent } )">Inscrire Adhérent</a>
                         </div>
                     </li>
                 }
@@ -48,17 +48,17 @@
                 @if (isConnected == true)
                 {
                     <li class="nav-item mx-4">
-                        <a class="nav-link" @Html.ActionLink("Mes Sorties", "MesSorties", "Sorties")></a>
+                        <a class="nav-link" href="@Url.Action("MesSorties","Sorties")">Mes Sorties</a>
                     </li>
 
                     <li class="nav-item mx-4">
                         <a class="navbar-brand">
-                            <span id="panierCount">@adherent.Solde €</span>
+                            <span id="soldeCount">@adherent.Solde €</span>
                         </a>
                     </li>
 
                     <li class="nav-item mx-4">
-                        <a class="nav-link" @Html.ActionLink("Déconnection", "Deconnection", "Adherents")></a>
+                        <a class="nav-link" href="@Url.Action("Deconnection","Adherents")">Déconnexion</a>
                     </li>
                 }
 

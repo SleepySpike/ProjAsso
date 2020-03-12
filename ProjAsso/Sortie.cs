@@ -29,6 +29,7 @@ namespace ProjAsso
         public System.DateTime Date { get; set; }
         public int CapaciteMinimum { get; set; }
         public int CapaciteMaximum { get; set; }
+        public int NbInscrits { get; set; }
     
         public virtual Association Association { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -17,6 +17,7 @@ namespace ProjAsso
         public int IdSortie { get; set; }
         public int IdAdherent { get; set; }
         public int IdAssociation { get; set; }
+        public bool Statut { get; set; }
     
         public virtual Adherent Adherent { get; set; }
         public virtual Association Association { get; set; }

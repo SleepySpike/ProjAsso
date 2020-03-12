@@ -66,53 +66,54 @@ namespace ProjAsso.Controllers
             //Instanciation de la sortie à laquelle on souhaite s'inscrire
             Sortie maSortie = db.Sorties.Find(idSortie);
 
-            //Sécurité
-            if (maSortie == null)
+            if (adherent.Solde < maSortie.Prix)
             {
-                return HttpNotFound();
+                TempData["Modal"] = 1;
             }
-
-            //Instanciation d'une liste de sortie
-            List<Sortie> mesSorties = new List<Sortie>();
-
-            //Déclaration d'une session regroupant les sorties
-            //Si elle est vide, on l'instancie avec la première inscription à une sortie
-            if (Session["MesSorties"] == null)
+            else if(maSortie.NbInscrits >= maSortie.CapaciteMaximum)
             {
-                Session["MesSorties"] = maSortie;
-                adherent.Solde -= maSortie.Prix;
+                TempData["Modal"] = 2;
             }
-            //Si elle contient déjà une/des sortie(s) on y ajoute la dernière
             else
             {
-                mesSorties = (List<Sortie>)Session["MesSorties"];
-                mesSorties.Add(maSortie);
-                Session["MesSorties"] = mesSorties;
+                //Sécurité
+                if (maSortie == null)
+                {
+                    return HttpNotFound();
+                }
+
                 adherent.Solde -= maSortie.Prix;
+                Session["Adherent"] = adherent;
+
+                maSortie.NbInscrits++;
+
+                //Instanciation d'un objet vierge de type sortie adhérent, dont on renseigne les valeurs pour ses différents champs
+                SortieAdherent sortieAdherent = new SortieAdherent();
+                sortieAdherent.IdAdherent = adherent.IdAdherent;
+                sortieAdherent.IdSortie = (int)idSortie;
+                sortieAdherent.IdAssociation = adherent.IdAssociation;
+                sortieAdherent.Statut = true;
+
+                db.SortieAdherents.Add(sortieAdherent);
+                db.SaveChanges();
+
+                //Même chose qu'au dessous, sauf que c'est pour l'historique de paiement
+                HistoriquePaiement historiquePaiement = new HistoriquePaiement();
+                historiquePaiement.IdAdherent = adherent.IdAdherent;
+                historiquePaiement.IdAssociation = adherent.IdAssociation;
+                historiquePaiement.Paiement = maSortie.Prix;
+                historiquePaiement.Date = DateTime.Now;
+                historiquePaiement.IdSortie = (int)idSortie;
+
+                //Sauvegarde en base de données
+                db.HistoriquePaiements.Add(historiquePaiement);
+                db.SaveChanges();
             }
-
-            //Instanciation d'un objet vierge de type sortie adhérent, dont on renseigne les valeurs pour ses différents champs
-            SortieAdherent sortieAdherent = new SortieAdherent();
-            sortieAdherent.IdAdherent = adherent.IdAdherent;
-            sortieAdherent.IdSortie = (int)idSortie;
-            sortieAdherent.IdAssociation = adherent.IdAssociation;
-
-            //Même chose qu'au dessous, sauf que c'est pour l'historique de paiement
-            HistoriquePaiement historiquePaiement = new HistoriquePaiement();
-            historiquePaiement.IdAdherent = adherent.IdAdherent;
-            historiquePaiement.IdAssociation = adherent.IdAssociation;
-            historiquePaiement.Paiement = maSortie.Prix;
-            historiquePaiement.Date = DateTime.Now;
-
-            //Sauvegarde en base de données
-            db.SortieAdherents.Add(sortieAdherent);
-            db.HistoriquePaiements.Add(historiquePaiement);
-            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
         //GET
-        public ActionResult CancelInscription(int? idSortie, int? idAdherent, int? idAssociation, int?idHistoriquePaiement)
+        public ActionResult CancelInscription(int? idSortie, int? idAdherent, int? idAssociation, int? idHistoriquePaiement)
         {
             Adherent adherent = db.Adherents.Find(idAdherent);
 
@@ -124,6 +125,10 @@ namespace ProjAsso.Controllers
 
             Sortie maSortie = db.Sorties.Find(idSortie);
             adherent.Solde += maSortie.Prix;
+            Session["Adherent"] = adherent;
+
+            maSortie.NbInscrits--;
+
 
             //Sécurité
             if (maSortie == null)
@@ -135,9 +140,10 @@ namespace ProjAsso.Controllers
             SortieAdherent sortieAdherent = db.SortieAdherents.Find(idSortie, idAdherent, idAssociation);
             db.SortieAdherents.Remove(sortieAdherent);
 
+
             //Recherche de l'historique paiement lié à la sortie via l'idSortie, afin de le delete
             HistoriquePaiement historiquePaiement = db.HistoriquePaiements.FirstOrDefault(hp => hp.IdSortie == maSortie.IdSortie);
-            db.HistoriquePaiements.Remove(historiquePaiement);
+            historiquePaiement.Statut = false;
 
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -146,6 +152,9 @@ namespace ProjAsso.Controllers
         // GET: Sorties/Details/5
         public ActionResult Details(int? id)
         {
+            Adherent adherent = (Adherent)Session["Adherent"];
+            ViewBag.Adherent = adherent;
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -159,10 +168,19 @@ namespace ProjAsso.Controllers
         }
 
         // GET: Sorties/Create
-        public ActionResult Create()
+        public ActionResult Create(int? idAdherent)
         {
-            ViewBag.IdAssociation = new SelectList(db.Associations, "IdAssociation", "Nom");
-            return View();
+            Adherent adherent = db.Adherents.Find(idAdherent);
+
+            if (idAdherent != null && adherent.Responsable == true)
+            {
+                ViewBag.IdAssociation = new SelectList(db.Associations, "IdAssociation", "Nom");
+                return View();
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            }
         }
 
         // POST: Sorties/Create
